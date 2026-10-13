@@ -3,36 +3,34 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>রহমানিয়া মাদ্রাসা ম্যানেজমেন্ট</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f2f5f3;color:#202923}
 header{background:#075e43;color:white;padding:22px 14px;text-align:center}
-header h2{margin:0 0 8px;font-size:22px}
-header p{margin:0;font-size:14px}
+header h2{margin:0 0 8px;font-size:21px}
+header p{margin:5px;font-size:14px}
 main{max-width:950px;margin:18px auto;padding:0 12px}
-.card{background:white;border-radius:12px;padding:17px;margin-bottom:16px;box-shadow:0 2px 9px #0000000c}
+.card{background:white;border-radius:12px;padding:17px;margin-bottom:16px;box-shadow:0 2px 9px #0001}
 h3{margin:0 0 14px;color:#075e43}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 label{display:block;font-size:14px;margin-bottom:5px}
 input,select{width:100%;padding:11px;border:1px solid #ccd5cf;border-radius:7px;font-size:15px;background:white}
 button{border:0;border-radius:7px;padding:11px 15px;background:#087650;color:white;font-size:15px;cursor:pointer;margin:5px 3px 0 0}
 .secondary{background:#52645a}
-.danger{background:#a72e2e}
-table{width:100%;border-collapse:collapse;min-width:620px}
+table{width:100%;border-collapse:collapse;min-width:570px}
 th,td{padding:10px;border-bottom:1px solid #e1e7e3;text-align:left;font-size:14px}
 th{background:#e7f2ec}
 .table-wrap{overflow-x:auto}
 .note{font-size:13px;color:#5b665f;line-height:1.6}
-#profile{line-height:1.9}
+.msg{padding:10px;background:#eef6f0;border-radius:7px;margin:10px 0;white-space:pre-wrap}
+.hidden{display:none!important}
 @media(max-width:520px){.grid{grid-template-columns:1fr}header h2{font-size:19px}}
 @media print{
-body{background:white}
-header,.no-print,#entry,#studentList{display:none!important}
+header,.no-print,#entry,#studentList,#searchCard{display:none!important}
 main{max-width:100%;margin:0;padding:0}
-.card{box-shadow:none;border:0}
-#printArea{display:block!important}
+.card{box-shadow:none}
 }
 </style>
 </head>
@@ -44,43 +42,69 @@ main{max-width:100%;margin:0;padding:0}
 </header>
 
 <main>
+<section class="card" id="loginCard">
+<h3>অ্যাডমিন লগইন</h3>
+<p class="note">আপনার Supabase-এ তৈরি করা অ্যাডমিন ইমেইল ও পাসওয়ার্ড ব্যবহার করুন।</p>
+<form id="loginForm">
+<div style="margin-bottom:12px">
+<label for="email">ইমেইল</label>
+<input id="email" type="email" autocomplete="username" required>
+</div>
+<div>
+<label for="password">পাসওয়ার্ড</label>
+<input id="password" type="password" autocomplete="current-password" required>
+</div>
+<button type="submit">লগইন করুন</button>
+</form>
+<div id="loginMsg" class="msg hidden"></div>
+</section>
+
+<section id="app" class="hidden">
+<div class="card no-print">
+<span id="userInfo" class="note"></span>
+<button id="logoutBtn" class="secondary">লগআউট</button>
+</div>
+
 <div class="card" id="entry">
 <h3>শিক্ষার্থী ভর্তি / তথ্য যোগ করুন</h3>
 <form id="studentForm">
 <div class="grid">
-<div><label>শিক্ষার্থীর নাম *</label><input id="name" required></div>
-<div><label>শিক্ষার্থীর আইডি *</label><input id="sid" placeholder="যেমন RM-2026-001" required></div>
-<div><label>পিতার নাম</label><input id="father"></div>
-<div><label>অভিভাবকের মোবাইল</label><input id="phone" inputmode="tel"></div>
-<div><label>জন্মতারিখ</label><input id="dob" type="date"></div>
-<div><label>ভর্তির তারিখ</label><input id="admission" type="date"></div>
-<div><label>শ্রেণি / বিভাগ</label>
+<div><label for="name">শিক্ষার্থীর নাম *</label><input id="name" required></div>
+<div><label for="sid">শিক্ষার্থীর আইডি *</label><input id="sid" placeholder="যেমন RM-2026-001" required></div>
+<div><label for="father">পিতার নাম</label><input id="father"></div>
+<div><label for="phone">অভিভাবকের মোবাইল</label><input id="phone" inputmode="tel"></div>
+<div><label for="dob">জন্মতারিখ</label><input id="dob" type="date"></div>
+<div><label for="admission">ভর্তির তারিখ</label><input id="admission" type="date"></div>
+<div>
+<label for="className">শ্রেণি / বিভাগ</label>
 <select id="className">
 <option>নার্সারি</option><option>প্রথম শ্রেণি</option>
 <option>দ্বিতীয় শ্রেণি</option><option>তৃতীয় শ্রেণি</option>
 <option>চতুর্থ শ্রেণি</option><option>পঞ্চম শ্রেণি</option>
 <option>নূরানী</option><option>নাজেরা</option><option>হিফজ</option>
-</select></div>
-<div><label>মাসিক বেতন (টাকা)</label><input id="fee" type="number" min="0" value="0"></div>
-<div style="grid-column:1/-1"><label>ঠিকানা</label><input id="address"></div>
+</select>
 </div>
-<button type="submit">শিক্ষার্থীর তথ্য সংরক্ষণ</button>
+<div><label for="fee">মাসিক বেতন (টাকা)</label><input id="fee" type="number" min="0" value="0"></div>
+<div style="grid-column:1/-1"><label for="address">ঠিকানা</label><input id="address"></div>
+</div>
+<button type="submit" id="saveBtn">শিক্ষার্থীর তথ্য সংরক্ষণ</button>
 <button type="reset" class="secondary">ফর্ম পরিষ্কার</button>
 </form>
-<p class="note">* চিহ্নিত ঘর পূরণ করা বাধ্যতামূলক। একই আইডি দুবার ব্যবহার করা যাবে না।</p>
+<div id="formMsg" class="msg hidden"></div>
+<p class="note">একই শিক্ষার্থী আইডি দ্বিতীয়বার ব্যবহার করা যাবে না।</p>
 </div>
 
-<div class="card no-print">
-<h3>শিক্ষার্থীর তথ্য খুঁজুন</h3>
+<div class="card no-print" id="searchCard">
+<h3>শিক্ষার্থী খুঁজুন</h3>
 <input id="search" placeholder="আইডি, নাম বা মোবাইল নম্বর লিখুন">
-<div id="searchResult" class="note">খোঁজার ফলাফল এখানে দেখা যাবে।</div>
+<div id="searchResult" class="note"></div>
 </div>
 
-<div class="card" id="printArea" style="display:none">
+<div class="card hidden" id="profileCard">
 <div id="profile"></div>
 <div class="no-print">
 <button onclick="window.print()">তথ্য প্রিন্ট করুন</button>
-<button class="secondary" onclick="closeProfile()">বন্ধ করুন</button>
+<button id="closeProfile" class="secondary">বন্ধ করুন</button>
 </div>
 </div>
 
@@ -93,97 +117,269 @@ main{max-width:100%;margin:0;padding:0}
 <tbody id="rows"></tbody>
 </table>
 </div>
-<p class="note">এই প্রাথমিক সংস্করণে তথ্য এই ব্রাউজারের ডিভাইসেই রাখা হয়। ডেটাবেস যুক্ত না করা পর্যন্ত এটি অনলাইন স্থায়ী সংরক্ষণ নয়।</p>
+<div id="listMsg" class="msg hidden"></div>
+<p class="note">তথ্য Supabase ডেটাবেস থেকে আনা হয়।</p>
 </div>
+</section>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const KEY = "rahmania_students_v1";
-let students = [];
-try { students = JSON.parse(localStorage.getItem(KEY) || "[]"); }
-catch(e) { students = []; }
+/* নিচের দুটি মান নিজের Supabase প্রজেক্টের তথ্য দিয়ে বদলাবেন */
+const SUPABASE_URL = "https://wckwlvzsqbmbcfpiqjik.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EnqOHwhFTA2HL8rDq71aaQ_9S4NmK8h";
 
 const $ = id => document.getElementById(id);
 const safe = value => String(value ?? "").replace(/[&<>"']/g, c => ({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
 }[c]));
 
-function saveData(){
-  localStorage.setItem(KEY, JSON.stringify(students));
-  render();
+let db = null;
+let students = [];
+
+function message(id, text) {
+  $(id).textContent = text;
+  $(id).classList.remove("hidden");
+}
+function clearMessage(id) {
+  $(id).textContent = "";
+  $(id).classList.add("hidden");
 }
 
-$("studentForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const s = {
-    id:$("sid").value.trim(),
-    name:$("name").value.trim(),
-    father:$("father").value.trim(),
-    phone:$("phone").value.trim(),
-    dob:$("dob").value,
-    admission:$("admission").value,
-    className:$("className").value,
-    fee:Number($("fee").value || 0),
-    address:$("address").value.trim()
-  };
-  if(students.some(x => x.id.toLowerCase() === s.id.toLowerCase())){
-    alert("এই আইডি আগে থেকেই আছে। অন্য আইডি ব্যবহার করুন।");
-    return;
+function configureDatabase() {
+  if (!window.supabase) {
+    message("loginMsg","Supabase লাইব্রেরি লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।");
+    return false;
   }
-  students.push(s);
-  saveData();
-  this.reset();
-  $("fee").value = 0;
-  alert("শিক্ষার্থীর তথ্য সংরক্ষিত হয়েছে।");
-  showProfile(s.id);
+  if (SUPABASE_URL.includes("PASTE_") ||
+      SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")) {
+    message("loginMsg","আগে কোডে আপনার Project URL ও Publishable Key বসাতে হবে।");
+    return false;
+  }
+  try {
+    db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+    return true;
+  } catch (e) {
+    message("loginMsg","Supabase সেটিংস পরীক্ষা করুন।");
+    return false;
+  }
+}
+
+function showApp(user) {
+  $("loginCard").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("userInfo").textContent = "লগইন: " + (user.email || "অ্যাডমিন");
+}
+
+function showLogin() {
+  $("app").classList.add("hidden");
+  $("loginCard").classList.remove("hidden");
+}
+
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  clearMessage("loginMsg");
+
+  if (!db && !configureDatabase()) return;
+
+  const btn = $("loginForm").querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = "লগইন হচ্ছে...";
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: $("email").value.trim(),
+      password: $("password").value
+    });
+    if (error) throw error;
+
+    showApp(data.user);
+    $("password").value = "";
+    await loadStudents();
+  } catch (err) {
+    message("loginMsg","লগইন করা যায়নি: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "লগইন করুন";
+  }
 });
 
-function render(){
-  $("total").textContent = students.length;
-  const q = $("search").value.trim().toLowerCase();
-  const found = students.filter(s =>
-    [s.id,s.name,s.phone].some(v => String(v || "").toLowerCase().includes(q))
-  );
-  $("rows").innerHTML = found.map(s => `
-    <tr>
-      <td>${safe(s.id)}</td>
-      <td>${safe(s.name)}</td>
-      <td>${safe(s.className)}</td>
-      <td>${safe(s.phone)}</td>
-      <td><button onclick="showProfile('${safe(s.id).replace(/'/g,"&#39;")}')">দেখুন / প্রিন্ট</button></td>
-    </tr>`).join("");
-  $("searchResult").textContent = q
-    ? `মিল পাওয়া গেছে: ${found.length} জন`
-    : "আইডি, নাম বা মোবাইল নম্বর লিখে খুঁজুন।";
+$("logoutBtn").addEventListener("click", async () => {
+  if (!db) return;
+  const { error } = await db.auth.signOut();
+  if (error) {
+    alert("লগআউট করা যায়নি: " + error.message);
+    return;
+  }
+  students = [];
+  render();
+  showLogin();
+});
+
+$("studentForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  clearMessage("formMsg");
+
+  const student = {
+    student_id: $("sid").value.trim(),
+    name: $("name").value.trim(),
+    father_name: $("father").value.trim(),
+    guardian_phone: $("phone").value.trim(),
+    date_of_birth: $("dob").value || null,
+    admission_date: $("admission").value || null,
+    class_name: $("className").value,
+    monthly_fee: Number($("fee").value || 0),
+    address: $("address").value.trim()
+  };
+
+  if (!student.student_id || !student.name) {
+    message("formMsg","শিক্ষার্থীর নাম ও আইডি লিখুন।");
+    return;
+  }
+
+  $("saveBtn").disabled = true;
+  $("saveBtn").textContent = "সংরক্ষণ হচ্ছে...";
+
+  try {
+    const { error } = await db.from("students").insert(student);
+    if (error) throw error;
+
+    this.reset();
+    $("fee").value = 0;
+    message("formMsg","শিক্ষার্থীর তথ্য ডেটাবেসে সংরক্ষিত হয়েছে।");
+    await loadStudents();
+    showProfile(student.student_id);
+  } catch (err) {
+    let text = err.message || "অজানা সমস্যা";
+    if (err.code === "23505") {
+      text = "এই শিক্ষার্থী আইডি আগে থেকেই আছে। অন্য আইডি ব্যবহার করুন।";
+    } else if (err.code === "42501" || err.code === "403") {
+      text = "ডেটাবেস অনুমতি দেয়নি। RLS Policy পরীক্ষা করতে হবে।";
+    }
+    message("formMsg","তথ্য সংরক্ষণ হয়নি: " + text);
+  } finally {
+    $("saveBtn").disabled = false;
+    $("saveBtn").textContent = "শিক্ষার্থীর তথ্য সংরক্ষণ";
+  }
+});
+
+async function loadStudents() {
+  clearMessage("listMsg");
+  $("rows").innerHTML = "";
+  $("total").textContent = "…";
+
+  try {
+    const { data, error } = await db
+      .from("students")
+      .select("student_id,name,father_name,guardian_phone,date_of_birth,admission_date,class_name,monthly_fee,address,created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    students = data || [];
+    render();
+  } catch (err) {
+    students = [];
+    render();
+    message("listMsg","তালিকা লোড হয়নি: " + err.message);
+  }
 }
 
-function showProfile(id){
-  const s = students.find(x => x.id === id);
-  if(!s){ alert("শিক্ষার্থী পাওয়া যায়নি।"); return; }
+function render() {
+  const q = $("search").value.trim().toLowerCase();
+  const found = students.filter(s =>
+    [s.student_id,s.name,s.guardian_phone].some(v =>
+      String(v || "").toLowerCase().includes(q)
+    )
+  );
+
+  $("total").textContent = students.length;
+  $("rows").innerHTML = found.map(s => `
+    <tr>
+      <td>${safe(s.student_id)}</td>
+      <td>${safe(s.name)}</td>
+      <td>${safe(s.class_name)}</td>
+      <td>${safe(s.guardian_phone)}</td>
+      <td><button type="button" data-student-id="${safe(s.student_id)}">দেখুন / প্রিন্ট</button></td>
+    </tr>
+  `).join("");
+
+  $("searchResult").textContent = q
+    ? "মিল পাওয়া গেছে: " + found.length + " জন"
+    : "আইডি, নাম বা মোবাইল নম্বর দিয়ে খুঁজুন।";
+}
+
+$("rows").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-student-id]");
+  if (btn) showProfile(btn.dataset.studentId);
+});
+
+function showProfile(id) {
+  const s = students.find(x => x.student_id === id);
+  if (!s) {
+    alert("শিক্ষার্থী পাওয়া যায়নি।");
+    return;
+  }
+
   $("profile").innerHTML = `
     <h2 style="text-align:center">শিক্ষার্থীর ভর্তি তথ্য</h2>
-    <h3 style="text-align:center">${safe("রহমানিয়া মদিনাতুল উলুম কওমি মাদ্রাসা")}</h3>
+    <h3 style="text-align:center">রহমানিয়া মদিনাতুল উলুম কওমি মাদ্রাসা</h3>
     <hr>
-    <p><b>শিক্ষার্থী আইডি:</b> ${safe(s.id)}</p>
+    <p><b>শিক্ষার্থী আইডি:</b> ${safe(s.student_id)}</p>
     <p><b>শিক্ষার্থীর নাম:</b> ${safe(s.name)}</p>
-    <p><b>পিতার নাম:</b> ${safe(s.father)}</p>
-    <p><b>অভিভাবকের মোবাইল:</b> ${safe(s.phone)}</p>
-    <p><b>জন্মতারিখ:</b> ${safe(s.dob)}</p>
-    <p><b>ভর্তির তারিখ:</b> ${safe(s.admission)}</p>
-    <p><b>শ্রেণি / বিভাগ:</b> ${safe(s.className)}</p>
-    <p><b>মাসিক বেতন:</b> ${safe(s.fee)} টাকা</p>
+    <p><b>পিতার নাম:</b> ${safe(s.father_name)}</p>
+    <p><b>অভিভাবকের মোবাইল:</b> ${safe(s.guardian_phone)}</p>
+    <p><b>জন্মতারিখ:</b> ${safe(s.date_of_birth)}</p>
+    <p><b>ভর্তির তারিখ:</b> ${safe(s.admission_date)}</p>
+    <p><b>শ্রেণি / বিভাগ:</b> ${safe(s.class_name)}</p>
+    <p><b>মাসিক বেতন:</b> ${safe(s.monthly_fee)} টাকা</p>
     <p><b>ঠিকানা:</b> ${safe(s.address)}</p>
     <br><br>
     <p style="display:flex;justify-content:space-between">
-      <span>অভিভাবকের স্বাক্ষর</span><span>প্রিন্সিপালের স্বাক্ষর</span>
+      <span>অভিভাবকের স্বাক্ষর</span>
+      <span>প্রিন্সিপালের স্বাক্ষর</span>
     </p>`;
-  $("printArea").style.display = "block";
-  $("printArea").scrollIntoView({behavior:"smooth"});
+
+  $("profileCard").classList.remove("hidden");
+  $("profileCard").scrollIntoView({behavior:"smooth"});
 }
 
-function closeProfile(){ $("printArea").style.display = "none"; }
+$("closeProfile").addEventListener("click", () => {
+  $("profileCard").classList.add("hidden");
+});
 $("search").addEventListener("input", render);
-render();
+
+async function init() {
+  if (!configureDatabase()) return;
+
+  try {
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+
+    if (data.session) {
+      showApp(data.session.user);
+      await loadStudents();
+    } else {
+      showLogin();
+    }
+
+    db.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        students = [];
+        render();
+        showLogin();
+      } else if (session) {
+        showApp(session.user);
+      }
+    });
+  } catch (err) {
+    message("loginMsg","সংযোগ পরীক্ষা করুন: " + err.message);
+  }
+}
+
+init();
 </script>
 </body>
 </html>
