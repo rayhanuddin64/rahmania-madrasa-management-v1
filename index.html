@@ -228,7 +228,9 @@ $("studentForm").addEventListener("submit", async function(e) {
   const student = {
     student_id: $("sid").value.trim(),
     name: $("name").value.trim(),
+    birth_registration_number: $("birthReg").value.trim(),
     father_name: $("father").value.trim(),
+    mother_name: $("mother").value.trim(),
     guardian_phone: $("phone").value.trim(),
     date_of_birth: $("dob").value || null,
     admission_date: $("admission").value || null,
